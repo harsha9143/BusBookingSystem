@@ -1,7 +1,15 @@
 const express = require("express");
 const db = require("./utils/databaseUtil");
+
+//routes
 const userRouter = require("./routes/userRouter");
 const busRouter = require("./routes/busRouter");
+
+//models
+const Bus = require("./models/bus");
+const User = require("./models/user");
+const Booking = require("./models/Booking");
+const Payment = require("./models/Payment");
 
 const app = express();
 
@@ -16,6 +24,15 @@ app.use("/users", userRouter);
 app.use("/buses", busRouter);
 
 const PORT = 4000;
-app.listen(PORT, () => {
-  console.log(`connection eshtablished successfully http://localhost:${PORT}`);
-});
+
+db.sync()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(
+        `connection eshtablished successfully http://localhost:${PORT}`
+      );
+    });
+  })
+  .catch((err) => {
+    console.log("failed to start server");
+  });
