@@ -6,5 +6,6 @@ const busRouter = express.Router();
 
 busRouter.post("/", busController.addBus);
 busRouter.get("/available/:seats", busController.getRequiredBuses);
+busRouter.get("/:id/bookings", busController.getBusBookings);
 
 module.exports = busRouter;

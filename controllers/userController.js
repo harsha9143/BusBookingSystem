@@ -1,5 +1,5 @@
 const db = require("../utils/databaseUtil");
-const User = require("../models/user");
+const { User, Booking, Bus } = require("../models/index");
 
 exports.addUser = (req, res, next) => {
   const { name, email } = req.body;
@@ -32,5 +32,29 @@ exports.getAllUsers = async (req, res, next) => {
     res.status(200).json({ users });
   } catch (error) {
     res.status(500).send("Users not found");
+  }
+};
+
+exports.getUserBookings = async (req, res, next) => {
+  const userId = req.params.id;
+
+  try {
+    const booking = await Booking.findAll({
+      where: {
+        id: userId,
+      },
+      attributes: ["id", "seatNumber"],
+      include: [
+        {
+          model: Bus,
+          attributes: ["busNumber"],
+        },
+      ],
+    });
+
+    res.status(200).json(booking);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send("Failed to fetch booking of user with id", userId);
   }
 };

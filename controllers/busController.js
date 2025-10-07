@@ -1,7 +1,7 @@
 const { Op } = require("sequelize");
 
 const db = require("../utils/databaseUtil");
-const Bus = require("../models/bus");
+const { Bus, Booking, User } = require("../models/index");
 
 exports.addBus = async (req, res, next) => {
   const { busNumber, totalSeats, availableSeats } = req.body;
@@ -40,5 +40,29 @@ exports.getRequiredBuses = async (req, res, next) => {
     res.status(200).json({ data: buses });
   } catch (error) {
     res.status(500).send("Buses not found");
+  }
+};
+
+exports.getBusBookings = async (req, res, next) => {
+  const busId = req.params.id;
+
+  try {
+    const booking = await Booking.findAll({
+      where: {
+        id: busId,
+      },
+      attributes: ["id", "seatNumber"],
+      include: [
+        {
+          model: User,
+          attributes: ["name", "email"],
+        },
+      ],
+    });
+
+    res.status(200).json(booking);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send("Failed to fetch bookings of bus");
   }
 };

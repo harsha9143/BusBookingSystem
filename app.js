@@ -6,10 +6,12 @@ const userRouter = require("./routes/userRouter");
 const busRouter = require("./routes/busRouter");
 
 //models
-const Bus = require("./models/bus");
-const User = require("./models/user");
-const Booking = require("./models/Booking");
+//const Bus = require("./models/bus");
+// const User = require("./models/user");
+// const Booking = require("./models/Booking");
 const Payment = require("./models/Payment");
+const { User, Booking, Bus } = require("./models/index");
+const bookingRouter = require("./routes/bookingRouter");
 
 const app = express();
 
@@ -22,6 +24,7 @@ app.use((req, res, next) => {
 
 app.use("/users", userRouter);
 app.use("/buses", busRouter);
+app.use("/bookings", bookingRouter);
 
 const PORT = 4000;
 
